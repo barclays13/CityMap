@@ -1,21 +1,20 @@
 "use strict";
-
 class CityMap {
 
     constructor (data, delimiter) {
         const arr =  data.split(delimiter).filter(str => str || str.length !== 0);
-        const oneCity = arr.map(elem => {
+        const cities = arr.map(elem => {
             return elem.replace(/"/g, '').split(',');
         });
 
         let listLatitudes = [];  //список всех широт
         let listLongitudes = []; //список всех долгот))
-        oneCity.map(elem => {
+        cities.map(elem => {
             listLatitudes.push(Number(elem[2]));
             listLongitudes.push(Number(elem[3]));
         });
 
-        this.oneCity = oneCity;
+        this.cities = cities;
         this.listLatitudes = listLatitudes;
         this.listLongitudes = listLongitudes;
     }
@@ -23,8 +22,8 @@ class CityMap {
 
     findNameCity(quantity, geographicCoordinates, infoSide) { // находит название крайнего города выбраной части света
 
-        const index = this.oneCity.findIndex(elem =>  Number(elem[geographicCoordinates]) === quantity);
-        const nameCity =  this.oneCity[index];
+        const index = this.cities.findIndex(elem =>  Number(elem[geographicCoordinates]) === quantity);
+        const nameCity =  this.cities[index];
         console.log(`Крайний город на ${infoSide} :${nameCity[0]},${nameCity[1]}`);
         // return nameCity[0];
     }
@@ -63,11 +62,11 @@ class CityMap {
 
         const minDistance = Math.min(...distanceToСities); // минимальный реззультат
         const index = distanceToСities.findIndex(elem =>  elem === minDistance); //index ближайшего города
-        console.log(`Ближайший город ${this.oneCity[index][0]}, для ${addLatitudes} - широты ${addLongitudes} - долготы`);
+        console.log(`Ближайший город ${this.cities[index][0]}, для ${addLatitudes} - широты ${addLongitudes} - долготы`);
     }
 
     stateAbbreviations () {
-        const listStateAbbreviations = this.oneCity.map(item => item[1].trim());
+        const listStateAbbreviations = this.cities.map(item => item[1].trim());
         let uniqueListStateAbbreviations = [];
         for (let abbreviations of listStateAbbreviations) {
             if (!uniqueListStateAbbreviations.includes(abbreviations)) {
@@ -78,6 +77,38 @@ class CityMap {
         console.log(`Уникальные названия штатов: "${resultString}"`);
     }
 
+    serchState () {
+        const readState = document.querySelector('.read-state'),
+        writeNemeSities = document.querySelector('.write-neme-sities'); 
+        const nameState = [];
+        let resultListCities = [];
+
+        readState.addEventListener('input', () => {
+            
+            this.cities.forEach(elem => {
+
+                if (readState.value.length < 2){
+                    resultListCities.length = 0;
+                }
+                
+                if(elem[1].trim().toLowerCase() === readState.value.trim().toLowerCase()){
+                    let index = this.cities.findIndex(ind => ind === elem);
+                    resultListCities.push(this.cities[index][0].trim());
+                }
+
+            });
+
+            writeNemeSities.innerHTML = resultListCities.join(', ');
+            
+
+
+
+        }); 
+
+
+
+
+    }
 }
 
 export default CityMap;

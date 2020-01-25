@@ -7,3 +7,5 @@ const city = new CityMap('"Nashville, TN", 36.17, -86.78; "New York, NY", 40.71,
 city.sideOfLight('West'); //West , East, North, South
 city.nearCity(200.23,200.66); //широта и долгота
 city.stateAbbreviations(); // абривиатуры городов
+city.serchState();
+
