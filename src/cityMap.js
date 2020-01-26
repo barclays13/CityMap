@@ -1,114 +1,210 @@
 "use strict";
+
 class CityMap {
 
     constructor (data, delimiter) {
-        const arr =  data.split(delimiter).filter(str => str || str.length !== 0);
-        const cities = arr.map(elem => {
-            return elem.replace(/"/g, '').split(',');
+        this.cities = [];
+        let dataShare =  data.split(delimiter).filter(str => str || str.length !== 0);
+        let cleanData = dataShare.map(element => {
+            return element.replace(/"/g, '').split(',');
         });
 
+        this.conversionData(cleanData);
         let listLatitudes = [];  //список всех широт
         let listLongitudes = []; //список всех долгот))
-        cities.map(elem => {
-            listLatitudes.push(Number(elem[2]));
-            listLongitudes.push(Number(elem[3]));
+        this.cities.map(elem => {
+            listLatitudes.push(Number(elem.latitude));
+            listLongitudes.push(Number(elem.longitude));
         });
-
-        this.cities = cities;
+        this.cleanData = cleanData;
         this.listLatitudes = listLatitudes;
         this.listLongitudes = listLongitudes;
     }
 
-
-    findNameCity(quantity, geographicCoordinates, infoSide) { // находит название крайнего города выбраной части света
-
-        const index = this.cities.findIndex(elem =>  Number(elem[geographicCoordinates]) === quantity);
-        const nameCity =  this.cities[index];
-        console.log(`Крайний город на ${infoSide} :${nameCity[0]},${nameCity[1]}`);
-        // return nameCity[0];
+    conversionData (data) {
+        data.forEach(element => {
+            const item = new City (element[0].trim(), element[1].trim(), element[2].trim(), element[3].trim());
+            this.cities.push(item);
+        });
     }
 
-    sideOfLight (side) {  //найти по запросу крайние города - 1)Elementary
-        switch (side) {
-            case 'North':
+    sideOfLight () {  
+        const writeSideOfLight = document.querySelector('.write-side-of-light'),
+        btnSearchCity = document.querySelector('.btn-search-city'),
+        writeNameCity = document.querySelector('.write-name-sity');
+
+        btnSearchCity.addEventListener('click', () => {
+            const side = writeSideOfLight.value.trim().toLowerCase(); 
+            switch (side) {
+            case 'north':
                 const maxLatitudes = Math.max(...this.listLatitudes);
-                this.findNameCity(maxLatitudes, 2, side);
+                this.cities.forEach(element => {
+                    if (maxLatitudes === Number(element.latitude)){
+                        writeNameCity.textContent = `Крайний город на - ${element.name}`;
+                    }
+                });
                 break;
-            case 'South':
+
+            case 'south':
                 const minLatitudes = Math.min(...this.listLatitudes);
-                this.findNameCity(minLatitudes, 2, side);
+                this.cities.forEach(element => {
+                    if (minLatitudes === Number(element.latitude)){
+                        writeNameCity.textContent = `Крайний город на - ${element.name}`;
+                    }
+                });
                 break;
-            case 'East':
+
+            case 'east':
                 const maxLongitudes = Math.max(...this.listLongitudes);
-                this.findNameCity(maxLongitudes, 3, side);
+                this.cities.forEach(element => {
+                    if (maxLongitudes === Number(element.longitude)){
+                        writeNameCity.textContent = `Крайний город на - ${element.name}`;
+                    }
+                });
                 break;
-            case 'West':
+
+            case 'west':
                 const minLongitudes = Math.min(...this.listLongitudes);
-                this.findNameCity(minLongitudes, 3, side);
+                this.cities.forEach(element => {
+                    if (minLongitudes === Number(element.longitude)){
+                        writeNameCity.textContent = `Крайний город на - ${element.name}`;
+                    }
+                });
                 break;
+
             default:
-                alert( `Нет такого значения` );
-          }
+                writeNameCity.textContent = `Ваши введенные данные не верны, правильный формат:West, East, North, South`;
+        }
+        });
     }
 
-    nearCity (addLatitudes, addLongitudes){
-        const resultLatitudes = this.listLatitudes.map( elem => addLatitudes - elem); // нахожу разность по широте
-        const resultLongitudes = this.listLongitudes.map( elem => addLongitudes - elem); // нахожу разность по долготе
-        let distanceToСities = []; // сумму разностоей поэлементно
-        for (let index = 0; index < resultLatitudes.length; index++) {
-            const distance = Math.sqrt((resultLatitudes[index]**2) + (resultLongitudes[index]**2));
-            distanceToСities.push(distance);
-        }
+    nearCity () {
+        const writeLatitude = document.querySelector('.write-latitude'),
+            writeLongitude = document.querySelector('.write-longitude'),
+            btnSearchCityNear = document.querySelector('.btn-search-city-near'),
+            writeNameSityNear = document.querySelector('.write-name-sity-near');
 
-        const minDistance = Math.min(...distanceToСities); // минимальный реззультат
-        const index = distanceToСities.findIndex(elem =>  elem === minDistance); //index ближайшего города
-        console.log(`Ближайший город ${this.cities[index][0]}, для ${addLatitudes} - широты ${addLongitudes} - долготы`);
+        btnSearchCityNear.addEventListener('click', () => {
+            if (writeLatitude.value == '' || writeLongitude.value == ''){
+                writeNameSityNear.textContent = `Введите данные`;
+                return;
+            }
+            const resultLatitudes = this.listLatitudes.map( elem => writeLatitude.value - elem); // нахожу разность по широте
+            const resultLongitudes = this.listLongitudes.map( elem => writeLongitude.value - elem); // нахожу разность по долготе
+            let distanceToСities = [];
+            for (let index = 0; index < resultLatitudes.length; index++) {
+                const distance = Math.sqrt((resultLatitudes[index]**2) + (resultLongitudes[index]**2));
+                distanceToСities.push(distance);
+            }
+    
+            const minDistance = Math.min(...distanceToСities); // минимальный реззультат
+            const index = distanceToСities.findIndex(elem => elem === minDistance); //index ближайшего города
+            writeNameSityNear.textContent = `Ближайший город ${this.cities[index].name}, для ${writeLatitude.value} - широты и ${writeLongitude.value} - долготы`;
+        });
     }
 
     stateAbbreviations () {
-        const listStateAbbreviations = this.cities.map(item => item[1].trim());
-        let uniqueListStateAbbreviations = [];
-        for (let abbreviations of listStateAbbreviations) {
-            if (!uniqueListStateAbbreviations.includes(abbreviations)) {
-                uniqueListStateAbbreviations.push(`${abbreviations}`);
-            }
-        }
-        let resultString = uniqueListStateAbbreviations.join(' ');
-        console.log(`Уникальные названия штатов: "${resultString}"`);
+        const listState = document.querySelector('.list-state'),
+            btnSearchState = document.querySelector('.btn-search-state');
+            btnSearchState.addEventListener('click', () => {
+                const listStateAbbreviations = this.cities.map(item => item.state);
+                let uniqueListStateAbbreviations = [];
+                for (let abbreviations of listStateAbbreviations) {
+                    if (!uniqueListStateAbbreviations.includes(abbreviations)) {
+                        uniqueListStateAbbreviations.push(`${abbreviations}`);
+                    }
+                }
+                let resultString = uniqueListStateAbbreviations.join(' ');
+                listState.textContent = `Уникальные названия штатов: "${resultString}"`;
+            });
     }
 
     serchState () {
         const readState = document.querySelector('.read-state'),
         writeNemeSities = document.querySelector('.write-neme-sities'); 
-        const nameState = [];
         let resultListCities = [];
 
         readState.addEventListener('input', () => {
             
             this.cities.forEach(elem => {
 
-                if (readState.value.length < 2){
+                if (readState.value.length < 2) {
                     resultListCities.length = 0;
                 }
                 
-                if(elem[1].trim().toLowerCase() === readState.value.trim().toLowerCase()){
+                if(elem.state.trim().toLowerCase() === readState.value.trim().toLowerCase()){
                     let index = this.cities.findIndex(ind => ind === elem);
-                    resultListCities.push(this.cities[index][0].trim());
+                    resultListCities.push(this.cities[index].name.trim());
                 }
+            });
+
+            writeNemeSities.textContent = resultListCities.join(', ');
+        }); 
+    }
+
+    addCity () {
+        const newName = document.querySelector('.add-city-name'),
+            newState = document.querySelector('.add-city-state'),
+            newLatitude = document.querySelector('.add-city-latitude'),
+            newLongitude = document.querySelector('.add-city-longitude'),
+            btnAddCity = document.querySelector('.add-city-submit'),
+            newCity = [];
+
+        btnAddCity.addEventListener('click', () => {
+            event.preventDefault();
+            if  (newCity.length == 1) {
+                newCity.length = 0;
+            }
+            
+            newCity.push([newName.value, newState.value, newLatitude.value, newLongitude.value]);
+            this.conversionData(newCity);
+        }); 
+    }   
+
+    saveListCityInLocalStorage () {
+        const writeCitiesLocal = document.querySelector('.write-cities-local'),
+            removeLocalStorage = document.querySelector('.remove-local-storage');
+
+            window.addEventListener("beforeunload", () => {
+                let listNameCities = "";
+                this.cities.map(city => {
+                    listNameCities = listNameCities.concat(city.toString());
+                });
+
+                localStorage.setItem('listCities', listNameCities);
+            });
+
+            window.addEventListener("load", () => {
+                let dataShare =  localStorage.getItem('listCities').split(';').filter(str => str || str.length !== 0);
+
+                let cleanData = dataShare.map(element => {
+                    return element.replace(/"/g, '').split(',');
+                });
+                this.cities = [];
+                this.conversionData(cleanData);
+
+                let listNameCities = "";
+                this.cities.map(city => {
+                    listNameCities = listNameCities.concat(`${city.name} `);
+                });
+                writeCitiesLocal.textContent = listNameCities.trim();
 
             });
 
-            writeNemeSities.innerHTML = resultListCities.join(', ');
-            
+    }
+}
+class City {
+    constructor (name, state, latitude, longitude) {
+        this.name = name;
+        this.state = state;
+        this.latitude = latitude; // широта
+        this.longitude = longitude; //долгоат
+    }
 
-
-
-        }); 
-
-
-
-
+    toString() {
+        return `${this.name}, ${this.state}, ${this.latitude}, ${this.longitude};`
     }
 }
 
 export default CityMap;
+

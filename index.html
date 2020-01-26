@@ -4,14 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>CityMap</title>
 </head>
-<body>
-
-    <h2>Поиск городов по штату:</h2>
-    <input class="read-state" type="search" name="nameState" value placeholder="Введите название штата:"> 
-    <label class="write-neme-sities"></label>
+<body >
+    <div class="container">
+        <h1> Тестовое задание для XB Software</h1>
+        <div class="alert alert-primary col-12">
+            <h2 >Крайний город:</label>
+            <input  class="form-control write-side-of-light col-12"  value="" placeholder="West, North, South, East">
+            <button type="button" class="btn btn-secondary btn-search-city col-12">Найти город заданной стороны светы</button> 
+            <h4 class="write-name-sity col-12"></h4>
+        </div>
+        <hr>
+        <div class=" alert alert-primary col-12">
+            <h2 >Город рядом:</label>
+                <input class="form-control write-latitude col-12" type="number" value placeholder="Введите долготу"> 
+                <input class="form-control write-longitude col-12" type="number" value placeholder="Введите широту" > 
+                <button class="btn btn-secondary btn-search-city-near col-12"> Искать ближайший город </button>
+                <h4 class="write-name-sity-near"></h4>
+        </div>
+        <hr>
+        <div class=" alert alert-primary col-12">
+            <h2 >Уникальные название штатов:</label>
+            <button class="btn btn-secondary btn-search-state col-12"> Искать все уникальные названия штатов </button>
+            <h4 class="list-state"></h4>
+        </div>
+        <hr>
+        <div class=" alert alert-primary col-12">
+            <h2 >Поиск городов по штату:</label>
+            <input class="read-state form-control" type="search"value placeholder="Введите название штата:"> 
+            <h4 class="write-neme-sities"></h4>
+        </div>
+        <hr>
+        <div class=" alert alert-primary col-12">
+            <h2 >Добавление города:</label>
+            <input class="form-control add-city-name col-12" placeholder="Название города" name="name" value>
+            <input class="form-control add-city-state col-12" placeholder="Название штата" name="state" value>
+            <input class="form-control add-city-latitude col-12" placeholder="Широта" name="latitude" value>
+            <input class="form-control add-city-longitude col-12" placeholder="Долгота" name="longitude" value>
+            <button class="btn btn-secondary add-city-submit col-12" >Добавить город</button>
+        </div>
+        <hr>
+        <div class=" alert alert-primary col-12">
+            <h2>Название городов из LocalStorage:</h2>
+            <h4 class="write-cities-local alert alert-success"></h4>
+        </div>
+    </div>
     <script type="text/javascript" src="./dist/bundle.js"></script>
 </body>
 </html>
