@@ -8,9 +8,9 @@ const btnAddCity = document.querySelector('.add-city-submit'),
     btnSearchCity = document.querySelector('.btn-search-city'),
     btnSearchCityNear = document.querySelector('.btn-search-city-near');
 
-btnSearchCity.addEventListener('click', cityUSA.sideOfLight.bind(cityUSA));
-btnSearchCityNear.addEventListener('click', cityUSA.nearCity.bind(cityUSA));
-btnSearchState.addEventListener('click', cityUSA.stateAbbreviations.bind(cityUSA));
+btnSearchCity.addEventListener('click', cityUSA.findSideOfLight.bind(cityUSA));
+btnSearchCityNear.addEventListener('click', cityUSA.findNearCity.bind(cityUSA));
+btnSearchState.addEventListener('click', cityUSA.getStateAbbreviations.bind(cityUSA));
 readState.addEventListener('input', cityUSA.serchState.bind(cityUSA));
 btnAddCity.addEventListener('click', cityUSA.addCity.bind(cityUSA));
 window.addEventListener("beforeunload", cityUSA.saveListCityInLocalStorage.bind(cityUSA));

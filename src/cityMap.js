@@ -47,7 +47,7 @@ class CityMap {
         return listLongitudes;
     }
 
-    sideOfLight() {
+    findSideOfLight() {
             const side = writeSideOfLight.value.trim().toLowerCase();
             switch (side) {
                 case 'north':
@@ -92,7 +92,7 @@ class CityMap {
             }
     }
 
-    nearCity() {
+    findNearCity() {
         if (writeLatitude.value == '' || writeLongitude.value == '') {
             writeNameSityNear.textContent = `Введите данные`;
             return;
@@ -111,7 +111,7 @@ class CityMap {
         writeNameSityNear.textContent = `Ближайший город ${this.cities[index].name}, для ${writeLatitude.value} - широты и ${writeLongitude.value} - долготы`;
     }
 
-    stateAbbreviations() {
+    getStateAbbreviations() {
         const listStateAbbreviations = this.cities.map(item => item.state);
         let uniqueListStateAbbreviations = [];
         for (let abbreviations of listStateAbbreviations) {
@@ -166,7 +166,7 @@ class CityMap {
             const item = new City(element[0].trim(), element[1].trim(), element[2].trim(), element[3].trim());
             this.cities.push(item);
         });
-        
+
         let listNameCities = "";
         this.cities.map(city => {
             listNameCities = listNameCities.concat(`${city.name} `);
