@@ -19,11 +19,16 @@ class CityMap {
 
     constructor(data, delimiter) {
         this.cities = [];
-        let cityString = data.split(delimiter).filter(str => str || str.length !== 0).map(element => {
+        let citiesString = data.split(delimiter).filter(str => str || str.length !== 0).map(element => {
             return element.replace(/"/g, '').split(',');
         });
-        this.cityString = cityString;
-        this.conversionData(cityString);
+
+        citiesString.forEach(element => {
+            const item = new City(element[0].trim(), element[1].trim(), element[2].trim(), element[3].trim());
+            this.cities.push(item);
+        });
+
+        this.citiesString = citiesString;
     }
 
     getCoordinatesLatitudes() {
@@ -40,13 +45,6 @@ class CityMap {
             listLongitudes.push(Number(elem.longitude));
         });
         return listLongitudes;
-    }
-
-    conversionData(data) {
-        data.forEach(element => {
-            const item = new City(element[0].trim(), element[1].trim(), element[2].trim(), element[3].trim());
-            this.cities.push(item);
-        });
     }
 
     sideOfLight() {
@@ -143,19 +141,14 @@ class CityMap {
     }
 
     addCity() {
-        const newCity = [];
         event.preventDefault();
-        if (newCity.length == 1) {
-            newCity.length = 0;
-        }
-
-        newCity.push([newName.value, newState.value, newLatitude.value, newLongitude.value]);
-        this.conversionData(newCity);
+        const newCity = new City(newName.value, newState.value, newLatitude.value,newLongitude.value);
+        this.cities.push(newCity);
     }
 
     saveListCityInLocalStorage() {
         let listNameCities = "";
-        this.cities.map(city => {
+        this.cities.forEach(city => {
             listNameCities = listNameCities.concat(city.toString());
         });
 
@@ -169,7 +162,11 @@ class CityMap {
         });
 
         this.cities = [];
-        this.conversionData(cityString);
+        cityString.forEach(element => {
+            const item = new City(element[0].trim(), element[1].trim(), element[2].trim(), element[3].trim());
+            this.cities.push(item);
+        });
+        
         let listNameCities = "";
         this.cities.map(city => {
             listNameCities = listNameCities.concat(`${city.name} `);
