@@ -138,7 +138,6 @@ class CityMap {
     }
 
     serchState() {
-
         let resultListCities = [];
         readState.addEventListener('input', () => {
             this.cities.forEach(elem => {
@@ -191,7 +190,7 @@ class CityMap {
             this.cities.map(city => {
                 listNameCities = listNameCities.concat(`${city.name} `);
             });
-            
+
             writeCitiesLocal.textContent = listNameCities.trim();
         });
     }
