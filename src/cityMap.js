@@ -29,18 +29,9 @@ class CityMap {
         });
         this.cleanData = cleanData;
         this.conversionData(cleanData);
-        // let = []; //список всех широт
-        // let listLongitudes = []; //список всех долгот))
-        // this.cities.map(elem => {
-        //     listLatitudes.push(Number(elem.latitude));
-        //     listLongitudes.push(Number(elem.longitude));
-        // });
-
-        // this.listLatitudes = listLatitudes;
-        // this.listLongitudes = listLongitudes;
     }
 
-    getCoordinatesLatitudes () {
+    getCoordinatesLatitudes() {
         let listLatitudes = []; //список всех широт
         this.cities.map(elem => {
             listLatitudes.push(Number(elem.latitude));
@@ -48,7 +39,7 @@ class CityMap {
         return listLatitudes;
     }
 
-    getCoordinatesLongitudes () {
+    getCoordinatesLongitudes() {
         let listLongitudes = []; //список всех широт
         this.cities.map(elem => {
             listLongitudes.push(Number(elem.longitude));
@@ -154,11 +145,13 @@ class CityMap {
                 if (readState.value.length < 2) {
                     resultListCities.length = 0;
                 }
+
                 if (elem.state.trim().toLowerCase() === readState.value.trim().toLowerCase()) {
                     let index = this.cities.findIndex(ind => ind === elem);
                     resultListCities.push(this.cities[index].name.trim());
                 }
             });
+
             writeNemeSities.textContent = resultListCities.join(', ');
         });
     }
@@ -191,13 +184,14 @@ class CityMap {
             let cleanData = dataShare.map(element => {
                 return element.replace(/"/g, '').split(',');
             });
+
             this.cities = [];
             this.conversionData(cleanData);
-
             let listNameCities = "";
             this.cities.map(city => {
                 listNameCities = listNameCities.concat(`${city.name} `);
             });
+            
             writeCitiesLocal.textContent = listNameCities.trim();
         });
     }
