@@ -19,8 +19,8 @@
         <hr>
         <div class=" alert alert-primary col-12">
             <h2 >Город рядом:</label>
-                <input class="form-control write-latitude col-12" type="number" value placeholder="Введите долготу"> 
-                <input class="form-control write-longitude col-12" type="number" value placeholder="Введите широту" > 
+                <input class="form-control write-latitude col-12" required type="number" value placeholder="Введите долготу"> 
+                <input class="form-control write-longitude col-12" required type="number" value placeholder="Введите широту" > 
                 <button class="btn btn-secondary btn-search-city-near col-12"> Искать ближайший город </button>
                 <h4 class="write-name-sity-near"></h4>
         </div>
@@ -41,8 +41,8 @@
             <h2 >Добавление города:</label>
             <input class="form-control add-city-name col-12" placeholder="Название города" name="name" value>
             <input class="form-control add-city-state col-12" placeholder="Название штата" name="state" value>
-            <input class="form-control add-city-latitude col-12" placeholder="Широта" name="latitude" value>
-            <input class="form-control add-city-longitude col-12" placeholder="Долгота" name="longitude" value>
+            <input class="form-control add-city-latitude col-12" required type="number" placeholder="Широта" name="latitude" value>
+            <input class="form-control add-city-longitude col-12" required type="number" placeholder="Долгота" name="longitude" value>
             <button class="btn btn-secondary add-city-submit col-12" >Добавить город</button>
         </div>
         <hr>
